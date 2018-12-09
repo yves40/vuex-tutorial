@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<!-- ******************************************************************************************************
+    build.xml
+
+    Dec 09 2018       Initial
+
+****************************************************************************************************** -->
+<project name="assessment" default="help" basedir="." >
+    <property file="build.properties"/>
+
+    <target name="help" description="What's in this build file">
+        <echo message="************************ @  Targets available "></echo>
+        <echo message=""></echo>
+        <echo message="************************ @  .......... vuexvboxweb   : vuex tutorial on vboxweb vbox"></echo>
+        <echo message=""></echo>
+    </target>
+
+    <!-- ===================================================================================== -->
+    <!-- Hosts deployment-->
+    <!-- ===================================================================================== -->
+    <!-- Google and some other providers login tests on vboxweb -->
+    <!-- ===================================================================================== -->
+    <target name="vuexvboxweb" depends="cleanup">
+        <echo message="************************ @ deploy node samples to ${vboxweb.server}"></echo>
+        <antcall target="nodekit"></antcall>
+        <antcall target="serverupdate">
+            <param name="remoteserver" value="${vboxweb.server}"/>
+            <param name="localdir" value="${build.workdir}"/>
+            <param name="localzip" value="vuex.zip"/>
+            <param name="remotenetdir" value="${vboxweb.htmlroot}/vuex-tutorial"/>
+            <param name="remoteaccount" value="${vboxweb.user}"/>
+            <param name="remoteaccountpass" value="${vboxweb.password}"/>
+        </antcall>
+    </target>
+
+    <!-- ===================================================================================== -->
+    <!-- node Vue web app kit building -->
+    <!-- ===================================================================================== -->
+    <target name="nodekit">
+        <copy todir="${build.workdir}" verbose="${copy.verbosemode}">
+            <fileset dir="${build.srcdir}" casesensitive="true">
+                <include name="**/*.html"/>
+                <include name="**/*.js"/>
+                <include name="**/*.json"/>
+                <include name="**/*.vue"/>
+                <include name="**/*.css"/>
+                <include name="**/*.png"/>
+                <include name="**/*.ico"/>
+                <include name="**/*.md"/>
+                <include name="**/.babelrc"/>
+                <include name="**/.eslintignore"/>
+                <include name="**/.eslintrc.js"/>
+                <include name="**/.gitignore"/>
+                <include name="**/.postcssrc.js"/>
+                <include name="**/.package.json"/>
+                <include name="**/.package-lock.json"/>
+                <exclude name="**/node_modules/**/"/>
+                <!-- <exclude name="**/codereservoir/**"/> -->
+            </fileset>
+        </copy>
+    </target>
+
+    <!-- ===================================================================================== -->
+    <!-- Generic task -->
+    <!-- ===================================================================================== -->
+
+    <!-- This task cleans the build folder -->
+
+    <target name="cleanup" depends="dir.check" if="dir.exists">
+        <echo message="************************ @  Clean the build environment : ${build.workdir}"></echo>
+        <delete file="${build.workdir}/*.*" verbose="${delete.verbosemode}" includeemptydirs="true">
+            <fileset dir="${build.workdir}" />
+        </delete>
+    </target>
+    
+    <target name="dir.check">
+        <condition property="dir.exists">
+            <available file="${build.workdir}" type="dir"/>
+        </condition>
+    </target>
+
+    <!-- This task cleans the server deployment folder -->
+    <!-- Cumulative updates don't call it -->
+
+    <target name="servercleanup" >
+        <echo message="************************ @  Cleanup target server directory : ${remotenetdir}"></echo>
+        <sshexec command="rm -rfv ${remotenetdir}/controllers ${remotenetdir}/models ${remotenetdir}/public ${remotenetdir}/views ${remotenetdir}/*.js
+            " host="${remoteserver}" username="${remoteaccount}" 
+            password="${remoteaccountpass}" trust="true" verbose="${delete.verbosemode}"  />
+    </target>
+
+    <!-- This task updates a remmote server -->
+
+    <target name="serverupdate"  depends="servercleanup">
+        <echo message="************************ @  Transform files in  files in ${localdir} files in to Unix LF mode"></echo>
+        <!-- Beware not to transform binary image files -->
+        <fixcrlf srcdir="${localdir}" includes="**/*.*" excludes="**/*.png, **/*.jpg" eol="lf" eof="remove"/>
+
+        <echo message="************************ @  Zip all needed files before copy"></echo>
+        <zip destfile="${localdir}/${localzip}">
+            <fileset dir="${localdir}" casesensitive="true" includes="**/**.*"/>
+        </zip>
+
+        <echo message="************************ @  Copy zip file to ${remotenetdir} on ${remoteserver}"></echo>
+        <scp todir="${remoteaccount}@${remoteserver}:${remotenetdir}" password="${remoteaccountpass}" trust="true"
+             verbose="${copy.verbosemode}" failonerror="no">
+            <fileset dir="${localdir}" includes="**/*.zip"/>
+        </scp>
+        
+        <echo message="************************ @  Unzipping script files"></echo>
+        <sshexec command="unzip -o ${remotenetdir}/${localzip} -d ${remotenetdir}" host="${remoteserver}" username="${remoteaccount}"
+                 password="${remoteaccountpass}"
+                 trust="true" verbose="${zip.verbosemode}"/>
+    </target>
+
+
+</project>
+
+
