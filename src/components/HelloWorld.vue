@@ -2,23 +2,35 @@
     HelloWord.vue
 
     Dec 09 2018   Initial
+    Dec 10 2018   Learn Getters, Actions, Mutations...
 
 -->
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
     <h2>{{ Version }}</h2>
-    <h1>{{ $store.state.count }}</h1>
+    <h1>the count is : {{ fetchCount }}</h1>
+    <button class="btn btn-primary" @click='increment'>Increase</button>
+    <button class="btn btn-primary" @click='decrement'>Decrease</button>
   </div>
 </template>
 
 <script>
+
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   name: 'Vuextutorial',
+  computed: mapGetters( ['fetchCount'] ),
+  methods: mapActions([
+    'increment',
+    'decrement',
+  ]),
   data () {
     return {
       msg: 'Welcome to vuex tutorial',
-      Version: 'vuex-tutorial, 1.02 Dec 09 2018',
+      Version: 'vuex-tutorial, 1.05 Dec 10 2018',
+      message: '',
     }
   }
 }
