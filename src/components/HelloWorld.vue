@@ -11,10 +11,10 @@
     <h2>{{ Version }}</h2>
     <h1>the count is : {{ fetchCount }}</h1>
     <h4>{{ getVersion }}</h4>
-    <button class="btn btn-primary" @click='increment'>Increase</button>
+    <button class="btn btn-primary" @click='increment' disabled:locked>Increase</button>
     <button class="btn btn-primary" @click='decrement'>Decrease</button>
     <div class="messagearea">
-      {{ getStatus }}
+      {{ getMessage }}
     </div>
   </div>
 </template>
@@ -25,15 +25,18 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Vuextutorial',
-  computed: mapGetters( ['fetchCount', 'getVersion', 'getStatus'] ),
+  computed: mapGetters( ['fetchCount', 'getVersion', 'getMessage','getStatus'] ),
   methods: mapActions([
     'increment',
     'decrement',
   ]),
+  locked() {
+    return $store.state.mutationrunning;
+  },
   data () {
     return {
       msg: 'Welcome to vuex tutorial',
-      Version: 'vuex-tutorial, 1.08 Dec 10 2018',
+      Version: 'vuex-tutorial, 1.12 Dec 10 2018',
       message: '',
     }
   }
