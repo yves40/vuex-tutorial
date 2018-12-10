@@ -10,8 +10,12 @@
     <h1>{{ msg }}</h1>
     <h2>{{ Version }}</h2>
     <h1>the count is : {{ fetchCount }}</h1>
+    <h4>{{ getVersion }}</h4>
     <button class="btn btn-primary" @click='increment'>Increase</button>
     <button class="btn btn-primary" @click='decrement'>Decrease</button>
+    <div class="messagearea">
+      {{ getStatus }}
+    </div>
   </div>
 </template>
 
@@ -21,7 +25,7 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Vuextutorial',
-  computed: mapGetters( ['fetchCount'] ),
+  computed: mapGetters( ['fetchCount', 'getVersion', 'getStatus'] ),
   methods: mapActions([
     'increment',
     'decrement',
@@ -29,7 +33,7 @@ export default {
   data () {
     return {
       msg: 'Welcome to vuex tutorial',
-      Version: 'vuex-tutorial, 1.05 Dec 10 2018',
+      Version: 'vuex-tutorial, 1.08 Dec 10 2018',
       message: '',
     }
   }
@@ -38,6 +42,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.messagearea {
+  color: blue;
+}
 h1, h2 {
   font-weight: normal;
 }
