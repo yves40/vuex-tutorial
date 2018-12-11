@@ -3,6 +3,7 @@
 
     Dec 09 2018   Initial
     Dec 10 2018   Learn Getters, Actions, Mutations...
+    Dec 11 2018   Play with some vue features
 
 -->
 <template>
@@ -16,6 +17,13 @@
     <div class="messagearea">
       {{ getMessage }}
     </div>
+    <div class="zelist">
+      <ul id="requestedactions" v-for="(request, index) in getRequests" :key="request.id">
+        <li>
+          {{ request.label }} - {{ request.date }} / {{index}} / {{ request.id }}
+        </li>
+      </ul>    
+    </div>
   </div>
 </template>
 
@@ -25,7 +33,7 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Vuextutorial',
-  computed: mapGetters( ['fetchCount', 'getVersion', 'getMessage','getStatus'] ),
+  computed: mapGetters( ['fetchCount', 'getVersion', 'getMessage','getStatus', 'getRequests'] ),
   methods: mapActions([
     'increment',
     'decrement',
@@ -36,7 +44,7 @@ export default {
   data () {
     return {
       msg: 'Welcome to vuex tutorial',
-      Version: 'vuex-tutorial, 1.12 Dec 10 2018',
+      Version: 'vuex-tutorial, 1.23 Dec 11 2018',
       message: '',
     }
   }
@@ -47,7 +55,24 @@ export default {
 <style scoped>
 .messagearea {
   color: blue;
+  height: 20px;;
 }
+.zelist {
+  background-color: #337ab7;
+  color: white;
+  text-align: left;
+  vertical-align: middle;
+  border: 1px;
+  border-radius: 4px;
+  padding: 10px 20px 10px 20px;
+  margin: 10px 20px 0px 20px;
+}
+
+#requestedactions {
+  padding: 0 0 0 0 ;
+  margin: 2px 10px 0px 10px;
+}
+
 h1, h2 {
   font-weight: normal;
 }
