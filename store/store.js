@@ -14,7 +14,7 @@ Vue.use(Vuex);
 const state = {
     reqid: 0,
     count: 5,
-    Version: 'store, 1.27 Dec 12 2018',
+    Version: 'store, 1.32 Dec 12 2018',
     message: '',
     mutationrunning: false,
     requests: [],
@@ -45,16 +45,20 @@ const DELAY = 5; // seconds
 const mutations = { // Synchronous
     increment(state) {
         if ( state.count < 10 ){
+            state.count++;
             state.mutationrunning = true;
-            state.message = 'Increment requested, should take ' + DELAY +  ' seconds';            
-            let thereqid = state.requests.push( { date: new Date().toString(), label: 'Increment', id: ++state.reqid });
+            state.message = 'Increment requested, should take ' + DELAY +  ' seconds'; 
+            let thereqid = ++state.reqid;
+            state.requests.push( { date: new Date().toString(), label: 'Increment', id: thereqid });
             let sometasktakingtime = new Promise(function(resolve, reject) {
                 setTimeout(function() {
                   resolve('Increment done : now removing REQID ' + thereqid);
-                  state.requests.splice(--thereqid, 1);
+                  let filtered = state.requests.filter( function(value, index){
+                      return value.id != thereqid;
+                  })
+                  state.requests = filtered;
                 }, DELAY * 1000)})
             .then(function(message) {
-                state.count++;
                 state.message = message;
                 state.mutationrunning = false;
             });
@@ -65,16 +69,20 @@ const mutations = { // Synchronous
     },
     decrement(state) {
         if (state.count > 0 ) {
+            state.count--;
             state.mutationrunning = true;
             state.message = 'Decrement requested, should take ' + DELAY +  ' seconds';
-            let thereqid = state.requests.push( { date: new Date().toString(), label: 'Decrement', id: ++state.reqid });
+            let thereqid = ++state.reqid;
+            state.requests.push( { date: new Date().toString(), label: 'Decrement', id: thereqid });
             let sometasktakingtime = new Promise(function(resolve, reject) {
                 setTimeout(function() {
                     resolve('Decrement done : now removing REQID ' + thereqid);
-                  state.requests.splice(--thereqid, 1);
-                }, DELAY * 1000)})
+                    let filtered = state.requests.filter( function(value, index){
+                        return value.id != thereqid;
+                    })
+                    state.requests = filtered;
+                  }, DELAY * 1000)})
             .then(function(message) {
-                state.count--;
                 state.message = message;
                 state.mutationrunning = false;
             });
