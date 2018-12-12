@@ -4,6 +4,7 @@
     Dec 09 2018   Initial
     Dec 10 2018   Learn Getters, Actions, Mutations...
     Dec 11 2018   Track requests in a log window
+    Dec 12 2018   Remove finished request from the log window
 ----------------------------------------------------------------------------*/
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -13,7 +14,7 @@ Vue.use(Vuex);
 const state = {
     reqid: 0,
     count: 5,
-    Version: 'store, 1.25 Dec 11 2018',
+    Version: 'store, 1.27 Dec 12 2018',
     message: '',
     mutationrunning: false,
     requests: [],
@@ -46,10 +47,11 @@ const mutations = { // Synchronous
         if ( state.count < 10 ){
             state.mutationrunning = true;
             state.message = 'Increment requested, should take ' + DELAY +  ' seconds';            
-            state.requests.push( { date: new Date().toString(), label: 'Increment', id: ++state.reqid });
+            let thereqid = state.requests.push( { date: new Date().toString(), label: 'Increment', id: ++state.reqid });
             let sometasktakingtime = new Promise(function(resolve, reject) {
                 setTimeout(function() {
-                  resolve('Increment done after ' + DELAY + ' seconds');
+                  resolve('Increment done : now removing REQID ' + thereqid);
+                  state.requests.splice(--thereqid, 1);
                 }, DELAY * 1000)})
             .then(function(message) {
                 state.count++;
@@ -65,10 +67,11 @@ const mutations = { // Synchronous
         if (state.count > 0 ) {
             state.mutationrunning = true;
             state.message = 'Decrement requested, should take ' + DELAY +  ' seconds';
-            state.requests.push( { date: new Date().toString(), label: 'Decrement', id: ++state.reqid });
+            let thereqid = state.requests.push( { date: new Date().toString(), label: 'Decrement', id: ++state.reqid });
             let sometasktakingtime = new Promise(function(resolve, reject) {
                 setTimeout(function() {
-                  resolve('Decrement done after ' + DELAY + ' seconds');
+                    resolve('Decrement done : now removing REQID ' + thereqid);
+                  state.requests.splice(--thereqid, 1);
                 }, DELAY * 1000)})
             .then(function(message) {
                 state.count--;
