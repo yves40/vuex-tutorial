@@ -12,12 +12,15 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 const state = {
-    reqid: 0,
+    reqid: 10000,
     count: 5,
-    Version: 'store, 1.32 Dec 12 2018',
+    Version: 'store, 1.38 Dec 12 2018',
     message: '',
-    mutationrunning: false,
+    mutationrunning: 0, // Used to track the current number of operations running
     requests: [],
+    MAXRUN: 3, // Max number of concurrent operations
+    MINDELAY: 5,
+    MAXDELAY: 20,
 };
 
 const getters = {
@@ -30,8 +33,8 @@ const getters = {
     getMessage(state) {
         return state.message;
     },
-    getStatus(state) {
-        return state.mutationrunning;
+    getRunning(state) {
+        return state.mutationrunning === state.MAXRUN;
     },
     getRequests(state) {
         return state.requests;
@@ -39,17 +42,21 @@ const getters = {
 
 };
 
-// Simulate some long task
-const DELAY = 5; // seconds
+// Simulate some long task runnig between 5 and 20 sec
+function generateRandomNumber(min , max) 
+{
+    return Math.floor(Math.random() * (max-min) + min) ;
+}
 
 const mutations = { // Synchronous
     increment(state) {
         if ( state.count < 10 ){
             state.count++;
-            state.mutationrunning = true;
-            state.message = 'Increment requested, should take ' + DELAY +  ' seconds'; 
+            ++state.mutationrunning;
+            let taskduration = generateRandomNumber(state.MINDELAY, state.MAXDELAY);
+            state.message = 'Increment requested, should take ' + taskduration +  ' seconds'; 
             let thereqid = ++state.reqid;
-            state.requests.push( { date: new Date().toString(), label: 'Increment', id: thereqid });
+            state.requests.push( { date: new Date().toString(), label: 'Increment OPS for ' + taskduration + ' sec', id: thereqid });
             let sometasktakingtime = new Promise(function(resolve, reject) {
                 setTimeout(function() {
                   resolve('Increment done : now removing REQID ' + thereqid);
@@ -57,10 +64,10 @@ const mutations = { // Synchronous
                       return value.id != thereqid;
                   })
                   state.requests = filtered;
-                }, DELAY * 1000)})
+                  --state.mutationrunning
+                }, taskduration * 1000)})
             .then(function(message) {
                 state.message = message;
-                state.mutationrunning = false;
             });
         }
         else{
@@ -70,10 +77,11 @@ const mutations = { // Synchronous
     decrement(state) {
         if (state.count > 0 ) {
             state.count--;
-            state.mutationrunning = true;
-            state.message = 'Decrement requested, should take ' + DELAY +  ' seconds';
+            ++state.mutationrunning;
+            let taskduration = generateRandomNumber(state.MINDELAY, state.MAXDELAY);
+            state.message = 'Decrement requested, should take ' + taskduration +  ' seconds';
             let thereqid = ++state.reqid;
-            state.requests.push( { date: new Date().toString(), label: 'Decrement', id: thereqid });
+            state.requests.push( { date: new Date().toString(), label: 'Decrement OPS for ' + taskduration + ' sec', id: thereqid });
             let sometasktakingtime = new Promise(function(resolve, reject) {
                 setTimeout(function() {
                     resolve('Decrement done : now removing REQID ' + thereqid);
@@ -81,10 +89,10 @@ const mutations = { // Synchronous
                         return value.id != thereqid;
                     })
                     state.requests = filtered;
-                  }, DELAY * 1000)})
+                    --state.mutationrunning
+                }, taskduration * 1000)})
             .then(function(message) {
                 state.message = message;
-                state.mutationrunning = false;
             });
         }
         else {
