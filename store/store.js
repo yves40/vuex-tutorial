@@ -15,8 +15,8 @@ Vue.use(Vuex);
 const state = {
     reqid: 10000,
     count: 5,
-    Version: 'store, 1.45 Dec 13 2018',
-    message: '',
+    Version: 'store, 1.49 Dec 13 2018',
+    logs: [],
     mutationrunning: 0, // Used to track the current number of operations running
     requests: [],
     MAXRUN: 4, // Max number of concurrent operations
@@ -31,8 +31,8 @@ const getters = {
     getVersion(state) {
         return 'Store version is : ' + state.Version;
     },
-    getMessage(state) {
-        return state.message;
+    getLogs(state) {
+        return state.logs;
     },
     getRunning(state) {
         return state.mutationrunning === state.MAXRUN;
@@ -48,12 +48,18 @@ function generateRandomNumber(min , max)
 {
     return Math.floor(Math.random() * (max-min) + min) ;
 }
+// Logger
+function log(mess) {
+    let timestamp = new Date().toString();
+    let x = timestamp.indexOf('GMT');
+    state.logs.push({ date: timestamp.substring(0, x - 1), message: mess });
+}
 
 const mutations = { // Synchronous
     increment(state) {
         ++state.mutationrunning;
         let taskduration = generateRandomNumber(state.MINDELAY, state.MAXDELAY);
-        state.message = 'Increment requested, should take ' + taskduration +  ' seconds'; 
+        log('Increment requested, should take ' + taskduration +  ' seconds'); 
         let thereqid = ++state.reqid;
         state.requests.push( { date: new Date().toString(), label: 'Increment OPS for ' + taskduration + ' sec', id: thereqid });
         let sometasktakingtime = new Promise(function(resolve, reject) {
@@ -72,13 +78,13 @@ const mutations = { // Synchronous
                 --state.mutationrunning
             }, taskduration * 1000)})
         .then(function(message) {
-            state.message = message;
+            log(message);
         });
     },
     decrement(state) {
         ++state.mutationrunning;
         let taskduration = generateRandomNumber(state.MINDELAY, state.MAXDELAY);
-        state.message = 'Decrement requested, should take ' + taskduration +  ' seconds';
+        log('Decrement requested, should take ' + taskduration +  ' seconds');
         let thereqid = ++state.reqid;
         state.requests.push( { date: new Date().toString(), label: 'Decrement OPS for ' + taskduration + ' sec', id: thereqid });
         let sometasktakingtime = new Promise(function(resolve, reject) {
@@ -97,7 +103,7 @@ const mutations = { // Synchronous
                 --state.mutationrunning
             }, taskduration * 1000)})
         .then(function(message) {
-            state.message = message;
+            log(message );
         });
     },
 };

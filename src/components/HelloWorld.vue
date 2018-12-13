@@ -5,6 +5,7 @@
     Dec 10 2018   Learn Getters, Actions, Mutations...
     Dec 11 2018   Play with some vue features
     Dec 12 2018   Manage buttons
+    Dec 13 2018   Log window 
 
 -->
 <template>
@@ -15,13 +16,19 @@
     <h4>{{ getVersion }}</h4>
     <button class="btn btn-primary" @click='increment' :disabled=getRunning>Increase</button>
     <button class="btn btn-primary" @click='decrement' :disabled=getRunning>Decrease</button>
-    <div class="messagearea">
-      {{ getMessage }}
-    </div>
+    <!--Track running actions -->
     <div class="zelist">
       <ul id="requestedactions" v-for="request in getRequests" :key="request.id">
         <li>
           {{ request.label }} - {{ request.date }} REQID: {{ request.id }}
+        </li>
+      </ul>    
+    </div>
+    <!--Logs -->
+    <div class="zelist">
+      <ul id="requestedactions" v-for="log in getLogs" :key="log.id">
+        <li>
+          {{ log.date }}: {{ log.message }}
         </li>
       </ul>    
     </div>
@@ -34,7 +41,7 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Vuextutorial',
-  computed: mapGetters( ['fetchCount', 'getVersion', 'getMessage','getRunning', 'getRequests'] ),
+  computed: mapGetters( ['fetchCount', 'getVersion', 'getLogs','getRunning', 'getRequests'] ),
   methods: mapActions([
     'increment',
     'decrement',
@@ -45,7 +52,7 @@ export default {
   data () {
     return {
       msg: 'Welcome to vuex tutorial',
-      Version: 'vuex-tutorial, 1.26 Dec 12 2018',
+      Version: 'vuex-tutorial, 1.28 Dec 13 2018',
       message: '',
     }
   }
@@ -54,10 +61,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.messagearea {
-  color: blue;
-  height: 20px;;
-}
+
 .zelist {
   background-color: #337ab7;
   color: white;
