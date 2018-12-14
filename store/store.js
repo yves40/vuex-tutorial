@@ -17,14 +17,14 @@ Vue.use(Vuex);
 const state = {
     reqid: 10000,
     count: 5,
-    Version: 'store, 1.63 Dec 15 2018',
+    Version: 'store, 1.64 Dec 15 2018',
     logs: [],
     mutationrunning: 0, // Used to track the current number of operations running
     requests: [], // Running requests
     MAXRUN: 4, // Max number of concurrent operations
     MINDELAY: 8,
     MAXDELAY: 16,
-    MAXLOG:8,
+    MAXLOG:12,
 };
 const getters = {
     fetchCount(state) {

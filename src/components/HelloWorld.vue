@@ -6,6 +6,7 @@
     Dec 11 2018   Play with some vue features
     Dec 12 2018   Manage buttons
     Dec 13 2018   Log window 
+    Dec 14 2018   Log window size and scroll, 1st tests 
 
 -->
 <template>
@@ -17,7 +18,7 @@
     <button class="btn btn-primary" @click='increment' :disabled=getRunning>Increase</button>
     <button class="btn btn-primary" @click='decrement' :disabled=getRunning>Decrease</button>
     <!--Track running actions -->
-    <div class="zelist">
+    <div class="running">
       <ul id="requestedactions" v-for="request in getRequests" :key="request.id">
         <li>
           {{ request.label }} - {{ request.date }} REQID: {{ request.id }}
@@ -25,7 +26,7 @@
       </ul>    
     </div>
     <!--Logs -->
-    <div class="zelist">
+    <div class="logging">
       <ul id="requestedactions" v-for="log in getLogs" :key="log.id">
         <li>
           {{ log.date }}: {{ log.message }}
@@ -52,7 +53,7 @@ export default {
   data () {
     return {
       msg: 'Welcome to vuex tutorial',
-      Version: 'vuex-tutorial, 1.28 Dec 13 2018',
+      Version: 'vuex-tutorial, 1.34 Dec 14 2018',
       message: '',
     }
   }
@@ -62,7 +63,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-.zelist {
+.running {
   background-color: #337ab7;
   color: white;
   text-align: left;
@@ -71,6 +72,21 @@ export default {
   border-radius: 4px;
   padding: 10px 20px 10px 20px;
   margin: 10px 20px 0px 20px;
+  height: 120px;
+  overflow: auto;
+}
+
+.logging {
+  background-color: #337ab7;
+  color: white;
+  text-align: left;
+  vertical-align: middle;
+  border: 1px;
+  border-radius: 4px;
+  padding: 10px 20px 10px 20px;
+  margin: 10px 20px 0px 20px;
+  height: 300px;
+  overflow: auto;
 }
 
 #requestedactions {
