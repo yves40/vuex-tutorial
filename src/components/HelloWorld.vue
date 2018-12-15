@@ -8,6 +8,7 @@
     Dec 13 2018   Log window 
     Dec 14 2018   Log window size and scroll, 1st tests 
     Dec 15 2018   Scroll log window to bottom when full
+                  Clear log button
 
 -->
 <template>
@@ -16,8 +17,9 @@
     <h2>{{ Version }}</h2>
     <h1>the count is : {{ fetchCount }}</h1>
     <h4>{{ getVersion }}</h4>
-    <button class="btn btn-primary" @click='increment' :disabled=getRunning>Increase</button>
-    <button class="btn btn-primary" @click='decrement' :disabled=getRunning>Decrease</button>
+    <button class="btn btn-primary" @click='increment' :disabled=getRunningLimit>Increase</button>
+    <button class="btn btn-primary" @click='decrement' :disabled=getRunningLimit>Decrease</button>
+    <button class="btn btn-primary" @click='clearlog' :disabled=getRunning>Clear log</button>
     <!--Track running actions -->
     <div class="running">
       <ul id="requestedactions" v-for="request in getRequests" :key="request.id">
@@ -43,11 +45,12 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Vuextutorial',
-  computed: mapGetters( ['fetchCount', 'getVersion', 'getLogs','getRunning', 'getRequests'] ),
+  computed: mapGetters( ['fetchCount', 'getVersion', 'getLogs','getRunningLimit', 'getRunning', 'getRequests'] ),
   methods: 
     mapActions([
       'increment',
       'decrement',
+      'clearlog',
     ]),
   updated:
     function () {
@@ -58,7 +61,7 @@ export default {
   data () {
     return {
       msg: 'Welcome to vuex tutorial',
-      Version: 'vuex-tutorial, 1.38 Dec 15 2018',
+      Version: 'vuex-tutorial, 1.42 Dec 15 2018',
       message: '',
     }
   }

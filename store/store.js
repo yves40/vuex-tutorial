@@ -7,7 +7,7 @@
     Dec 12 2018   Remove finished request from the log window
     Dec 13 2018   Modify counter management
     Dec 14 2018   Maxlog and scroll window
-    Dec 15 2018   Timestamp format
+    Dec 15 2018   Timestamp format, clear log
 ----------------------------------------------------------------------------*/
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -18,7 +18,7 @@ Vue.use(Vuex);
 const state = {
     reqid: 10000,
     count: 5,
-    Version: 'store, 1.65 Dec 15 2018',
+    Version: 'store, 1.67 Dec 15 2018',
     logs: [],
     mutationrunning: 0, // Used to track the current number of operations running
     requests: [], // Running requests
@@ -38,13 +38,15 @@ const getters = {
     getLogs(state) {
         return state.logs;
     },
-    getRunning(state) {
+    getRunningLimit(state) {
         return state.mutationrunning === state.MAXRUN;
+    },
+    getRunning(state) {
+        return state.mutationrunning > 0;
     },
     getRequests(state) {
         return state.requests;
-    }
-
+    },
 };
 
 // ---------------------------------------------------- Simulate some long task running between 5 and 20 sec
@@ -122,6 +124,9 @@ const mutations = { // Synchronous
             log(message, thereqid );
         });
     },
+    clearlog(state) {
+        state.logs = [];
+    },
 };
 
 // ---------------------------------------------------- VUEX actions
@@ -131,6 +136,9 @@ const actions = { // Asynchronous
     },
     decrement(context) {
         context.commit('decrement');
+    },
+    clearlog(context) {
+        context.commit('clearlog');
     },
 };
 
