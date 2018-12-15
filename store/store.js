@@ -1,13 +1,14 @@
 /*----------------------------------------------------------------------------
     store.js    
 
-    Dec 09 2018   Initial
-    Dec 10 2018   Learn Getters, Actions, Mutations...
-    Dec 11 2018   Track requests in a log window. Learn Promises
-    Dec 12 2018   Remove finished request from the log window
-    Dec 13 2018   Modify counter management
-    Dec 14 2018   Maxlog and scroll window
-    Dec 15 2018   Timestamp format, clear log
+    Dec 09 2018     Initial
+    Dec 10 2018     Learn Getters, Actions, Mutations...
+    Dec 11 2018     Track requests in a log window. Learn Promises
+    Dec 12 2018     Remove finished request from the log window
+    Dec 13 2018     Modify counter management
+    Dec 14 2018     Maxlog and scroll window
+    Dec 15 2018     Timestamp format, clear log
+                    Problem with scroll every second
 ----------------------------------------------------------------------------*/
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -20,7 +21,7 @@ const timerID = setInterval(timeClock, 1000);
 const state = {
     reqid: 10000,
     count: 5,
-    Version: 'store, 1.71 Dec 15 2018',
+    Version: 'store, 1.72 Dec 15 2018',
     logs: [],
     mutationrunning: 0, // Used to track the current number of operations running
     requests: [], // Running requests
@@ -40,6 +41,9 @@ const getters = {
     },
     getLogs(state) {
         return state.logs;
+    },
+    getLogsSize(state) {
+        return state.logs.length;
     },
     getRunningLimit(state) {
         return state.mutationrunning === state.MAXRUN;

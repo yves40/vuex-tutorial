@@ -8,14 +8,14 @@
     Dec 13 2018   Log window 
     Dec 14 2018   Log window size and scroll, 1st tests 
     Dec 15 2018   Scroll log window to bottom when full
-                  Clear log button
+                  Clear log button. Problem with scroll every second
 
 -->
 <template>
   <div class="hello">
     <h2>{{ Version }}</h2>
     <h4>{{ getVersion }}</h4>
-    <p class="time">The count is : {{fetchCount}} @ {{getTime}}</p>
+    <p class="time">The count is : {{fetchCount}} @ {{getTime}} : Log size: {{getLogsSize}}</p>
     <button class="btn btn-primary" @click='increment' :disabled=getRunningLimit>Increase</button>
     <button class="btn btn-primary" @click='decrement' :disabled=getRunningLimit>Decrease</button>
     <button class="btn btn-primary" @click='clearlog' :disabled=getRunning>Clear log</button>
@@ -29,7 +29,7 @@
     </div>
     <!--Logs -->
     <div class="logging">
-      <ul id="requestedactions" v-for="log in getLogs" :key="log.id">
+      <ul id="requestedactions" v-for="log in getLogs" :key="log.id" >
         <li>
           {{ log.date }}: {{ log.message }}
         </li>
@@ -41,10 +41,11 @@
 <script>
 
 import { mapGetters, mapActions } from 'vuex';
+import { store } from '../../store/store';
 
 export default {
   name: 'Vuextutorial',
-  computed: mapGetters( ['fetchCount', 'getVersion', 'getLogs','getRunningLimit', 'getRunning', 'getRequests', 'getTime'] ),
+  computed: mapGetters( ['fetchCount', 'getVersion', 'getLogs', 'getLogsSize', 'getRunningLimit', 'getRunning', 'getRequests', 'getTime'] ),
   methods: 
     mapActions([
       'increment',
@@ -53,14 +54,16 @@ export default {
     ]),
   updated:
     function () {
+      this.thelogsize = store.state.logs.length;
       var container = document.querySelector('.logging');
       var scrollHeight = container.scrollHeight;
       container.scrollTop = scrollHeight;
-    },
+  },
   data () {
     return {
-      Version: 'vuex-tutorial, 1.47 Dec 15 2018',
+      Version: 'vuex-tutorial, 1.58 Dec 15 2018',
       message: '',
+      thelogsize: 0,
     }
   }
 }
