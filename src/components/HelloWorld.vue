@@ -7,6 +7,7 @@
     Dec 12 2018   Manage buttons
     Dec 13 2018   Log window 
     Dec 14 2018   Log window size and scroll, 1st tests 
+    Dec 15 2018   Scroll log window to bottom when full
 
 -->
 <template>
@@ -43,17 +44,21 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Vuextutorial',
   computed: mapGetters( ['fetchCount', 'getVersion', 'getLogs','getRunning', 'getRequests'] ),
-  methods: mapActions([
-    'increment',
-    'decrement',
-  ]),
-  locked() {
-    return $store.state.mutationrunning;
-  },
+  methods: 
+    mapActions([
+      'increment',
+      'decrement',
+    ]),
+  updated:
+    function () {
+      var container = document.querySelector('.logging');
+      var scrollHeight = container.scrollHeight;
+      container.scrollTop = scrollHeight;
+    },
   data () {
     return {
       msg: 'Welcome to vuex tutorial',
-      Version: 'vuex-tutorial, 1.34 Dec 14 2018',
+      Version: 'vuex-tutorial, 1.38 Dec 15 2018',
       message: '',
     }
   }

@@ -6,7 +6,8 @@
     Dec 11 2018   Track requests in a log window. Learn Promises
     Dec 12 2018   Remove finished request from the log window
     Dec 13 2018   Modify counter management
-    Dec 14 2018   MAxlog and scroll window
+    Dec 14 2018   Maxlog and scroll window
+    Dec 15 2018   Timestamp format
 ----------------------------------------------------------------------------*/
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -17,15 +18,16 @@ Vue.use(Vuex);
 const state = {
     reqid: 10000,
     count: 5,
-    Version: 'store, 1.64 Dec 15 2018',
+    Version: 'store, 1.65 Dec 15 2018',
     logs: [],
     mutationrunning: 0, // Used to track the current number of operations running
     requests: [], // Running requests
     MAXRUN: 4, // Max number of concurrent operations
     MINDELAY: 8,
     MAXDELAY: 16,
-    MAXLOG:12,
+    MAXLOG:16,
 };
+
 const getters = {
     fetchCount(state) {
         return state.count;
@@ -57,13 +59,14 @@ function log(mess, id) {
     if (state.logs.length === state.MAXLOG) {
         state.logs.shift();
     }
-    state.logs.push({ date: months[d.getMonth()] + '-' + d.getDate() + '-' + d.getFullYear() + ' ' + d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds() , message: id + ' ' + mess });
+    state.logs.push({ date: months[d.getMonth()] + '-' + d.getDate() + '-' + d.getFullYear() + ' ' 
+            + d.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"), message: id + ' ' + mess });
 }
 
 // ---------------------------------------------------- New request in Queue
 function request(reqid) {
     let td = generateRandomNumber(state.MINDELAY, state.MAXDELAY);
-    state.requests.push( { date: new Date().toString(), label: 'Increment OPS for ' + td + ' sec', id: reqid });
+    state.requests.push( { date: new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"), label: 'Increment OPS for ' + td + ' sec', id: reqid });
     return td;
 }
 
