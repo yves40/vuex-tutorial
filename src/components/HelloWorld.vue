@@ -13,10 +13,9 @@
 -->
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
     <h2>{{ Version }}</h2>
-    <h1>the count is : {{ fetchCount }}</h1>
     <h4>{{ getVersion }}</h4>
+    <p class="time">The count is : {{fetchCount}} @ {{getTime}}</p>
     <button class="btn btn-primary" @click='increment' :disabled=getRunningLimit>Increase</button>
     <button class="btn btn-primary" @click='decrement' :disabled=getRunningLimit>Decrease</button>
     <button class="btn btn-primary" @click='clearlog' :disabled=getRunning>Clear log</button>
@@ -45,7 +44,7 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Vuextutorial',
-  computed: mapGetters( ['fetchCount', 'getVersion', 'getLogs','getRunningLimit', 'getRunning', 'getRequests'] ),
+  computed: mapGetters( ['fetchCount', 'getVersion', 'getLogs','getRunningLimit', 'getRunning', 'getRequests', 'getTime'] ),
   methods: 
     mapActions([
       'increment',
@@ -60,8 +59,7 @@ export default {
     },
   data () {
     return {
-      msg: 'Welcome to vuex tutorial',
-      Version: 'vuex-tutorial, 1.42 Dec 15 2018',
+      Version: 'vuex-tutorial, 1.47 Dec 15 2018',
       message: '',
     }
   }
@@ -100,6 +98,12 @@ export default {
 #requestedactions {
   padding: 0 0 0 0 ;
   margin: 2px 10px 0px 10px;
+}
+
+.time {
+    letter-spacing: 0.05em;
+    font-size: 30px;
+    padding: 5px 0;
 }
 
 h1, h2 {

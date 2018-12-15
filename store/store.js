@@ -15,13 +15,16 @@ import { request } from 'http';
 
 Vue.use(Vuex);
 
+const timerID = setInterval(timeClock, 1000);
+
 const state = {
     reqid: 10000,
     count: 5,
-    Version: 'store, 1.67 Dec 15 2018',
+    Version: 'store, 1.71 Dec 15 2018',
     logs: [],
     mutationrunning: 0, // Used to track the current number of operations running
     requests: [], // Running requests
+    clock: new Date().toTimeString(), 
     MAXRUN: 4, // Max number of concurrent operations
     MINDELAY: 8,
     MAXDELAY: 16,
@@ -47,7 +50,15 @@ const getters = {
     getRequests(state) {
         return state.requests;
     },
+    getTime(state) {
+        return state.clock;
+    },
 };
+
+// ---------------------------------------------------- Display a clock
+function timeClock() {
+    state.clock = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+}
 
 // ---------------------------------------------------- Simulate some long task running between 5 and 20 sec
 function generateRandomNumber(min , max) 
