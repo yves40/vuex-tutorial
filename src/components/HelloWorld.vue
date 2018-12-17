@@ -9,17 +9,18 @@
     Dec 14 2018   Log window size and scroll, 1st tests 
     Dec 15 2018   Scroll log window to bottom when full
                   Clear log button. Problem with scroll every second
-    Dec 17 2018   Fix refresh problem fro the log window
-
+    Dec 17 2018   Fix refresh problem for the log window
+                  Add some tech info and look @ Vuex getters from Vue
 -->
 <template>
   <div class="hello">
     <h2>{{ Version }}</h2>
     <h4>{{ getVersion }}</h4>
-    <p class="time">The count is : {{fetchCount}} @ {{getTime}} : Log size: {{getLogsSize}}</p>
+    <p class="time">The count is : {{fetchCount}} @ {{getTime}}</p>
     <button class="btn btn-primary" @click='increment' :disabled=getRunningLimit>Increase</button>
     <button class="btn btn-primary" @click='decrement' :disabled=getRunningLimit>Decrease</button>
     <button class="btn btn-primary" @click='clearlog' :disabled=getRunning>Clear log</button>
+    <span class="techinfo">Log size: {{getLogsSize}} Requests sent : {{getRequestsNumber}}</span>
     <!--Track running actions -->
     <div class="running">
       <ul id="requestedactions" v-for="request in getRequests" :key="request.id">
@@ -42,11 +43,12 @@
 <script>
 
 import { mapGetters, mapActions } from 'vuex';
-import { store } from '../../store/store';
 
 export default {
   name: 'Vuextutorial',
-  computed: mapGetters( ['fetchCount', 'getVersion', 'getLogs', 'getLogsSize', 'getRunningLimit', 'getRunning', 'getRequests', 'getTime'] ),
+  computed: mapGetters( ['fetchCount', 'getVersion', 'getLogs', 
+            'getLogsSize', 'getRunningLimit', 'getRunning', 
+            'getRequests', 'getRequestsNumber', 'getTime'] ),
   methods: 
     mapActions([
       'increment',
@@ -55,9 +57,9 @@ export default {
     ]),
   updated:
     function () {
-      if (store.state.logschanged) {
-        this.thelogsize = store.state.logs.length;
-        store.state.logschanged = false;
+      if (this.$store.state.logschanged) {
+        this.thelogsize = this.$store.state.logs.length;
+        this.$store.state.logschanged = false;
         let container = document.querySelector('.logging');
         let scrollHeight = container.scrollHeight;
         container.scrollTop = scrollHeight;
@@ -65,7 +67,7 @@ export default {
   },
   data () {
     return {
-      Version: 'vuex-tutorial, 1.59 Dec 17 2018',
+      Version: 'vuex-tutorial, 1.66 Dec 17 2018',
       message: '',
       thelogsize: 0,
     }
@@ -100,6 +102,14 @@ export default {
   margin: 10px 20px 0px 20px;
   height: 300px;
   overflow: auto;
+}
+
+.techinfo {
+  text-align: center;
+  color: darkgreen;
+  vertical-align: middle;
+  font-size: 14px;
+  padding-left: 20px;
 }
 
 #requestedactions {

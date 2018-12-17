@@ -19,15 +19,17 @@ Vue.use(Vuex);
 
 const timerID = setInterval(timeClock, 1000);
 
+const IDSTART = 10000;
 const state = {
-    reqid: 10000,
+    reqid: IDSTART,
     count: 5,
-    Version: 'store, 1.74 Dec 17 2018',
+    Version: 'store, 1.78 Dec 17 2018',
     logs: [],
     logschanged: 'false',
     mutationrunning: 0, // Used to track the current number of operations running
     requests: [], // Running requests
-    clock: new Date().toTimeString(), 
+    clock: new Date().toTimeString(),
+    IDSTART: 10000,
     MAXRUN: 4, // Max number of concurrent operations
     MINDELAY: 8,
     MAXDELAY: 16,
@@ -55,6 +57,9 @@ const getters = {
     },
     getRequests(state) {
         return state.requests;
+    },
+    getRequestsNumber(state) {
+        return state.reqid - IDSTART;
     },
     getTime(state) {
         return state.clock;
