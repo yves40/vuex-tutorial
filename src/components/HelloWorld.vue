@@ -9,6 +9,7 @@
     Dec 14 2018   Log window size and scroll, 1st tests 
     Dec 15 2018   Scroll log window to bottom when full
                   Clear log button. Problem with scroll every second
+    Dec 17 2018   Fix refresh problem fro the log window
 
 -->
 <template>
@@ -54,14 +55,17 @@ export default {
     ]),
   updated:
     function () {
-      this.thelogsize = store.state.logs.length;
-      var container = document.querySelector('.logging');
-      var scrollHeight = container.scrollHeight;
-      container.scrollTop = scrollHeight;
+      if (store.state.logschanged) {
+        this.thelogsize = store.state.logs.length;
+        store.state.logschanged = false;
+        let container = document.querySelector('.logging');
+        let scrollHeight = container.scrollHeight;
+        container.scrollTop = scrollHeight;
+      }
   },
   data () {
     return {
-      Version: 'vuex-tutorial, 1.58 Dec 15 2018',
+      Version: 'vuex-tutorial, 1.59 Dec 17 2018',
       message: '',
       thelogsize: 0,
     }

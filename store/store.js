@@ -9,6 +9,7 @@
     Dec 14 2018     Maxlog and scroll window
     Dec 15 2018     Timestamp format, clear log
                     Problem with scroll every second
+    Dec 17 2018     Fix refresh problem fro the log window 
 ----------------------------------------------------------------------------*/
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -21,8 +22,9 @@ const timerID = setInterval(timeClock, 1000);
 const state = {
     reqid: 10000,
     count: 5,
-    Version: 'store, 1.72 Dec 15 2018',
+    Version: 'store, 1.74 Dec 17 2018',
     logs: [],
+    logschanged: 'false',
     mutationrunning: 0, // Used to track the current number of operations running
     requests: [], // Running requests
     clock: new Date().toTimeString(), 
@@ -78,12 +80,14 @@ function log(mess, id) {
     }
     state.logs.push({ date: months[d.getMonth()] + '-' + d.getDate() + '-' + d.getFullYear() + ' ' 
             + d.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"), message: id + ' ' + mess });
+    state.logschanged = true;
 }
 
 // ---------------------------------------------------- New request in Queue
 function request(reqid) {
     let td = generateRandomNumber(state.MINDELAY, state.MAXDELAY);
     state.requests.push( { date: new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1"), label: 'Increment OPS for ' + td + ' sec', id: reqid });
+    state.logschanged = true;
     return td;
 }
 
