@@ -10,6 +10,7 @@
     Dec 15 2018     Timestamp format, clear log
                     Problem with scroll every second
     Dec 17 2018     Fix refresh problem fro the log window 
+    Dec 18 2018     Promise...reject
 ----------------------------------------------------------------------------*/
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -23,7 +24,7 @@ const IDSTART = 10000;
 const state = {
     reqid: IDSTART,
     count: 5,
-    Version: 'store, 1.78 Dec 17 2018',
+    Version: 'store, 1.80 Dec 18 2018',
     logs: [],
     logschanged: 'false',
     mutationrunning: 0, // Used to track the current number of operations running
@@ -96,6 +97,12 @@ function request(reqid) {
     return td;
 }
 
+function testFetchURL() {
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(response => response.json())
+    .then(data => console.log(data));
+}
+
 // ---------------------------------------------------- VUEX mutations
 const mutations = { // Synchronous
     increment(state) {
@@ -111,7 +118,7 @@ const mutations = { // Synchronous
                     resolve('Increment done');
                 }
                 else{
-                    resolve('Increment aborted, max limit reached');
+                    reject('Increment aborted, max limit reached');
                 }
                 let filtered = state.requests.filter( function(value, index){
                     return value.id != thereqid;
@@ -120,6 +127,9 @@ const mutations = { // Synchronous
                 --state.mutationrunning
             }, taskduration * 1000)})
         .then(function(message) {
+            log(message, thereqid);
+        })
+        .catch(function(message) {
             log(message, thereqid);
         });
     },
@@ -136,7 +146,7 @@ const mutations = { // Synchronous
                     resolve('Decrement done');
                 }
                 else {
-                    resolve('Decrement aborted, already 0');
+                    reject('Decrement rejected, already 0');
                 }
                 let filtered = state.requests.filter( function(value, index){
                     return value.id != thereqid;
@@ -146,6 +156,9 @@ const mutations = { // Synchronous
             }, taskduration * 1000)})
         .then(function(message) {
             log(message, thereqid );
+        })
+        .catch(function(message) {
+            log(message, thereqid);
         });
     },
     clearlog(state) {

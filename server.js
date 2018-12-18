@@ -29,7 +29,6 @@ app.use( function(req, res, next) {
   return next();
 });
 
-
 console.log('----------------- Server status -------------------------------');
 const port = process.env.API_PORT || 8080;
 app.use('/', router);
