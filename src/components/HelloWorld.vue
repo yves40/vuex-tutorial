@@ -17,17 +17,23 @@
     <h2>{{ Version }}</h2>
     <h4>{{ getVersion }}</h4>
     <p class="time">The count is : {{fetchCount}} @ {{getTime}}</p>
-    <button class="btn btn-primary" @click='increment' :disabled=getRunningLimit>Increase</button>
-    <button class="btn btn-primary" @click='decrement' :disabled=getRunningLimit>Decrease</button>
-    <button class="btn btn-primary" @click='clearlog' :disabled=getRunning>Clear log</button>
-    <span class="techinfo">Log size: {{getLogsSize}} Requests sent : {{getRequestsNumber}}</span>
+    <div class="grid6">
+      <span></span>
+      <button class="btn btn-primary" @click='increment' :disabled=getRunningLimit>Increase</button>
+      <button class="btn btn-primary" @click='decrement' :disabled=getRunningLimit>Decrease</button>
+      <button class="btn btn-primary" @click='clearlog' :disabled=getRunning>Clear log</button>
+      <span class="techinfo">Log size: {{getLogsSize}}</span>
+      <span class="techinfo">Requests sent : {{getRequestsNumber}}</span>
+    </div>
     <!--Track running actions -->
     <div class="running">
+      <span></span>
       <ul id="requestedactions" v-for="request in getRequests" :key="request.id">
         <li>
           {{ request.label }} - {{ request.date }} REQID: {{ request.id }}
         </li>
-      </ul>    
+      </ul> 
+      <span></span>   
     </div>
     <!--Logs -->
     <div class="logging">
@@ -46,6 +52,13 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Vuextutorial',
+  data () {
+    return {
+      Version: 'vuex-tutorial, 1.76 Dec 18 2018',
+      message: '',
+      thelogsize: 0,
+    }
+  },
   computed: mapGetters( ['fetchCount', 'getVersion', 'getLogs', 
             'getLogsSize', 'getRunningLimit', 'getRunning', 
             'getRequests', 'getRequestsNumber', 'getTime'] ),
@@ -65,18 +78,20 @@ export default {
         container.scrollTop = scrollHeight;
       }
   },
-  data () {
-    return {
-      Version: 'vuex-tutorial, 1.67 Dec 18 2018',
-      message: '',
-      thelogsize: 0,
-    }
-  }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.grid6 {
+  display:grid;
+  grid-gap: 10px; 
+  grid-template-columns: repeat(6, 1fr);
+  max-width: 70%;
+  margin: auto;
+  vertical-align: middle;
+}
 
 .running {
   background-color: #337ab7;
