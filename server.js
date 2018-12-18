@@ -4,14 +4,13 @@
 //    Dec 18 2018    Initial
 //----------------------------------------------------------------------------
 
-const Version = "server.js, Dec 18 2018, 1.03 ";
+const Version = "server.js, Dec 18 2018, 1.05 ";
 
 const express = require('express');
-const serveStatic = require('serve-static');
 
 
 const app = express();
-app.use(serveStatic(__dirname + "/dist"));
+app.use(express.static(__dirname + '/dist'));
 const router = express.Router();
 
 console.log('----------------- Set some routes -------------------------------');
