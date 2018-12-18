@@ -67,7 +67,7 @@ export default {
   },
   data () {
     return {
-      Version: 'vuex-tutorial, 1.66 Dec 17 2018',
+      Version: 'vuex-tutorial, 1.67 Dec 18 2018',
       message: '',
       thelogsize: 0,
     }
