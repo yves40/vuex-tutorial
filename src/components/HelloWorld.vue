@@ -90,7 +90,6 @@ export default {
   grid-template-columns: repeat(6, 1fr);
   max-width: 70%;
   margin: auto;
-  vertical-align: middle;
 }
 
 .running {
@@ -121,7 +120,7 @@ export default {
 
 .techinfo {
   text-align: center;
-  color: darkgreen;
+  color: darkblue;
   vertical-align: middle;
   font-size: 14px;
   padding-left: 20px;
