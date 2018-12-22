@@ -3,6 +3,7 @@
     build.xml
 
     Dec 09 2018       Initial
+    Dec 22 2018       .bashrc
 
 ****************************************************************************************************** -->
 <project name="assessment" default="help" basedir="." >
@@ -47,6 +48,7 @@
                 <include name="**/*.png"/>
                 <include name="**/*.ico"/>
                 <include name="**/*.md"/>
+                <include name="**/.bashrc"/>
                 <include name="**/.babelrc"/>
                 <include name="**/.eslintignore"/>
                 <include name="**/.eslintrc.js"/>
@@ -109,6 +111,10 @@
         
         <echo message="************************ @  Unzipping script files"></echo>
         <sshexec command="unzip -o ${remotenetdir}/${localzip} -d ${remotenetdir}" host="${remoteserver}" username="${remoteaccount}"
+                 password="${remoteaccountpass}"
+                 trust="true" verbose="${zip.verbosemode}"/>
+        <!-- Manage the .bashrc file -->
+        <sshexec command="mv ${remotenetdir}/.bashrc ~/.bashrc" host="${remoteserver}" username="${remoteaccount}"
                  password="${remoteaccountpass}"
                  trust="true" verbose="${zip.verbosemode}"/>
     </target>
