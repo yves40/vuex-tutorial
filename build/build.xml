@@ -48,6 +48,7 @@
                 <include name="**/*.png"/>
                 <include name="**/*.ico"/>
                 <include name="**/*.md"/>
+                <include name="**/startweb.sh"/>
                 <include name="**/.bashrc"/>
                 <include name="**/.babelrc"/>
                 <include name="**/.eslintignore"/>
