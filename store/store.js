@@ -11,10 +11,19 @@
                     Problem with scroll every second
     Dec 17 2018     Fix refresh problem fro the log window 
     Dec 18 2018     Promise...reject
+    Sep 09 2019     Test with node server
 ----------------------------------------------------------------------------*/
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { request } from 'http';
+import axios from 'axios';
+
+const axiosinstance = axios.create({
+    baseURL: process.env.NODESERVER || 'localhost:8088/',
+    timeout: 1000,
+    headers: {'Access-Control-Allow-Origin': '*'},
+  });
+
 
 Vue.use(Vuex);
 
@@ -24,7 +33,7 @@ const IDSTART = 10000;
 const state = {
     reqid: IDSTART,
     count: 5,
-    Version: 'store, 1.80 Dec 18 2018',
+    Version: 'store, 1.82 Sep 09 2019',
     logs: [],
     logschanged: 'false',
     mutationrunning: 0, // Used to track the current number of operations running
@@ -133,7 +142,25 @@ const mutations = { // Synchronous
             log(message, thereqid);
         });
     },
+
     decrement(state) {
+
+        // Test code 
+        axiosinstance(
+            {
+                url: '/test',
+                method: 'get',
+            },
+        )
+        .then((response) => {
+              console.log('/test called' + response);
+            },
+          )
+        .catch((error) => {
+            console.log('/test call failed');
+            },
+          );    
+        
         ++state.mutationrunning;
         let thereqid = state.reqid;
         let taskduration = request(thereqid);
