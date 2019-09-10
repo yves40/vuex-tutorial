@@ -11,19 +11,16 @@
                     Problem with scroll every second
     Dec 17 2018     Fix refresh problem fro the log window 
     Dec 18 2018     Promise...reject
-    Sep 09 2019     Test with node server
+    Sep 09 2019     Test with node server.
+    Sep 10 2019     Test with node server..
 ----------------------------------------------------------------------------*/
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { request } from 'http';
-import axios from 'axios';
+//import { request } from 'http';
 
-const axiosinstance = axios.create({
-    baseURL: process.env.NODESERVER || 'localhost:8088/',
-    timeout: 1000,
-    headers: {'Access-Control-Allow-Origin': '*'},
-  });
-
+const logger = require('../utilities/logger');
+const axiosutility = require('../utilities/axiosutility');
+const axiosinstance = axiosutility.getAxios();
 
 Vue.use(Vuex);
 
@@ -33,7 +30,7 @@ const IDSTART = 10000;
 const state = {
     reqid: IDSTART,
     count: 5,
-    Version: 'store, 1.82 Sep 09 2019',
+    Version: 'store, 1.85 Sep 10 2019',
     logs: [],
     logschanged: 'false',
     mutationrunning: 0, // Used to track the current number of operations running
@@ -114,6 +111,20 @@ function testFetchURL() {
 
 // ---------------------------------------------------- VUEX mutations
 const mutations = { // Synchronous
+    servicetest(state) {
+        axiosinstance({
+                url: '/test',
+                method: 'get',
+            })
+        .then((response) => {
+                logger.info('/test called' + response.data.message);
+                },
+            )
+            .catch((error) => {
+                logger.error('/test call failed');
+                },
+            );
+    },
     increment(state) {
         ++state.mutationrunning;
         let thereqid = state.reqid;
@@ -144,23 +155,6 @@ const mutations = { // Synchronous
     },
 
     decrement(state) {
-
-        // Test code 
-        axiosinstance(
-            {
-                url: '/test',
-                method: 'get',
-            },
-        )
-        .then((response) => {
-              console.log('/test called' + response);
-            },
-          )
-        .catch((error) => {
-            console.log('/test call failed');
-            },
-          );    
-        
         ++state.mutationrunning;
         let thereqid = state.reqid;
         let taskduration = request(thereqid);
@@ -195,6 +189,9 @@ const mutations = { // Synchronous
 
 // ---------------------------------------------------- VUEX actions
 const actions = { // Asynchronous
+    servicetest(context) { 
+        context.commit('servicetest'); 
+    },
     increment(context) { 
         context.commit('increment'); 
     },
