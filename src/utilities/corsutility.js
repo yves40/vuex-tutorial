@@ -10,8 +10,8 @@ const Version = "corsutility:1.14, Mar 06 2019 ";
 const logger = require('./logger');
 
 const whitelist = [
-  'http://vboxweb:8088',
-  'http://localhost:8088',
+  'http://vboxweb:8080',
+  'http://localhost:8080',
 ];
 
 function checkOrigin(origin, callback) {
