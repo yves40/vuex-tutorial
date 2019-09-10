@@ -11,16 +11,18 @@
                   Clear log button. Problem with scroll every second
     Dec 17 2018   Fix refresh problem for the log window
                   Add some tech info and look @ Vuex getters from Vue
+    Sep 10 2019   Add a button for service test
 -->
 <template>
   <div class="hello">
     <h2>{{ Version }}</h2>
     <h4>{{ getVersion }}</h4>
     <p class="time">The count is : {{fetchCount}} @ {{getTime}}</p>
-    <div class="grid6">
+    <div class="grid7">
       <span></span>
       <button class="btn btn-primary" @click='increment' :disabled=getRunningLimit>Increase</button>
       <button class="btn btn-primary" @click='decrement' :disabled=getRunningLimit>Decrease</button>
+      <button class="btn btn-primary" @click='servicetest' :disabled=getRunningLimit>Service Call</button>
       <button class="btn btn-primary" @click='clearlog' :disabled=getRunning>Clear log</button>
       <span class="techinfo">Log size: {{getLogsSize}}</span>
       <span class="techinfo">Requests sent : {{getRequestsNumber}}</span>
@@ -54,7 +56,7 @@ export default {
   name: 'Vuextutorial',
   data () {
     return {
-      Version: 'vuex-tutorial, 1.76 Dec 18 2018',
+      Version: 'vuex-tutorial, 1.77 Sep 10 2019',
       message: '',
       thelogsize: 0,
     }
@@ -67,6 +69,7 @@ export default {
       'increment',
       'decrement',
       'clearlog',
+      'servicetest',
     ]),
   updated:
     function () {
@@ -84,11 +87,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
-.grid6 {
+.grid7 {
   display:grid;
   grid-gap: 10px; 
-  grid-template-columns: repeat(6, 1fr);
-  max-width: 70%;
+  grid-template-columns: repeat(7, 1fr);
+  max-width: 80%;
   margin: auto;
 }
 
