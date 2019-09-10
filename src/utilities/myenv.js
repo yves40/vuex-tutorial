@@ -17,11 +17,12 @@
 //    Feb 28 2019   WIP on mongodb connection checking
 //    Mar 01 2019   WIP on mongodb connection checking II
 //                  No more mongo here, specific file
+//    Sep 09 2019   Playing with local server on WIN10
 //----------------------------------------------------------------------------
-const Version = "myenv:1.49, Mar 01 2019 ";
+const Version = "myenv:1.50, Sep 09 2019 ";
 
 // URL prefix used to call the services node
-const prefix = process.env.NODEURLPREFIX || "http://vboxweb:8081";
+const prefix = process.env.NODEURLPREFIX || "http://localhost:8088";
 // For the server.js
 const port = "8081";
 
