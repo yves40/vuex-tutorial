@@ -3,15 +3,17 @@
 //
 //    Dec 18 2018    Initial
 //    Sep 08 2019    Wake up old code
+//    Sep 10 2019    Test call works
 //----------------------------------------------------------------------------
 
-const Version = "server.js, Sep 08 2019, 1.11 ";
+const Version = "server.js, Sep 10 2019, 1.12 ";
 
 const express = require('express');
 const cors = require('cors');
 const axiosutility = require("./src/utilities/axiosutility");
 const logger = require("./src/utilities/logger");
 const corsutility = require("./src/utilities/corsutility");
+const myenv = require("./src/utilities/myenv");
 const bodyParser  = require('body-parser');
 
 //----------------------------------------------------------------------------
@@ -22,6 +24,10 @@ logger.info('AXIOS :');
 logger.info("---------------------------------------------------------");
 logger.info('Using axiosutility: ' + axiosutility.getVersion());
 
+//----------------------------------------------------------------------------
+// base URL from myenv
+//----------------------------------------------------------------------------
+logger.info('Base URL for service call : ' + myenv.getURLprefix() + ' [ ' + myenv.getPrefixSource() + ' ]');
 
 //----------------------------------------------------------------------------
 // Cross-Origin Resource Sharing
@@ -48,8 +54,9 @@ logger.info('/');
 router.get('/', function (req, res) {
   res.json({message: 'API initialized'});
 })
+logger.info('/test');
 router.get('/test', function (req, res) {
-  res.json({message: 'API test is OK for me but CORS blocks Chrome'});
+  res.json({message: '/test API OK'});
 })
 
 // For the favicon boring request error
