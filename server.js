@@ -6,7 +6,7 @@
 //    Sep 10 2019    Test call works
 //----------------------------------------------------------------------------
 
-const Version = "server.js, Sep 10 2019, 1.12 ";
+const Version = "server.js, Sep 10 2019, 1.13 ";
 
 const express = require('express');
 const cors = require('cors');
@@ -56,7 +56,7 @@ router.get('/', function (req, res) {
 })
 logger.info('/test');
 router.get('/test', function (req, res) {
-  res.json({message: '/test API OK'});
+  res.json({message: Version + '/test OK'});
 })
 
 // For the favicon boring request error

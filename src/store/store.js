@@ -30,7 +30,7 @@ const IDSTART = 10000;
 const state = {
     reqid: IDSTART,
     count: 5,
-    Version: 'store, 1.85 Sep 10 2019',
+    Version: 'store, 1.86 Sep 10 2019',
     logs: [],
     logschanged: 'false',
     mutationrunning: 0, // Used to track the current number of operations running
@@ -117,7 +117,7 @@ const mutations = { // Synchronous
                 method: 'get',
             })
         .then((response) => {
-                logger.info('/test called' + response.data.message);
+                logger.info(response.data.message);
                 },
             )
             .catch((error) => {
