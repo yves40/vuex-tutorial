@@ -43,7 +43,7 @@ export NODE_DISABLE_COLORS=1
 
 # Used to switch node programs from DEV to PROD
 export NODEDEVMODE=true
-export NODEURLPREFIX=http://vboxweb:8089
+export NODEURLPREFIX=http://vboxweb:8088
 # Vuex tutorial and CAMS tests
 export CAMUSER=yves
 export CAMPASS=dumb

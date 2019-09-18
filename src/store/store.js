@@ -20,6 +20,7 @@ import Vuex from 'vuex';
 
 const logger = require('../utilities/logger');
 const axiosutility = require('../utilities/axiosutility');
+const myenv = require('../utilities/myenv');
 const axiosinstance = axiosutility.getAxios();
 
 Vue.use(Vuex);
@@ -30,7 +31,7 @@ const IDSTART = 10000;
 const state = {
     reqid: IDSTART,
     count: 5,
-    Version: 'store, 1.86 Sep 10 2019',
+    Version: 'store, 1.87 Sep 10 2019',
     logs: [],
     logschanged: 'false',
     mutationrunning: 0, // Used to track the current number of operations running
@@ -112,6 +113,7 @@ function testFetchURL() {
 // ---------------------------------------------------- VUEX mutations
 const mutations = { // Synchronous
     servicetest(state) {
+        logger.info('service base URL :' + myenv.getURLprefix());
         axiosinstance({
                 url: '/test',
                 method: 'get',
