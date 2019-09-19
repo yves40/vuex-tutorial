@@ -12,6 +12,7 @@
     Dec 17 2018   Fix refresh problem for the log window
                   Add some tech info and look @ Vuex getters from Vue
     Sep 10 2019   Add a button for service test
+    Sep 19 2019   Test on asusp4
 -->
 <template>
   <div class="hello">
@@ -56,7 +57,7 @@ export default {
   name: 'Vuextutorial',
   data () {
     return {
-      Version: 'vuex-tutorial, 1.77 Sep 10 2019',
+      Version: 'vuex-tutorial, 1.78 Sep 19 2019',
       message: '',
       thelogsize: 0,
     }
